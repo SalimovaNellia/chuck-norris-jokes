@@ -1,0 +1,360 @@
+@mixin flexbox() {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+//<ШРИФТЫ>===============================================================================================
+
+//<Подключаем шрифты>=======================================================================================
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+//</Подключаем шрифты>=======================================================================================
+
+//<Иконочные шрифты>==========================================================================================
+
+//</Иконочные шрифты>==========================================================================================
+
+//<Шрифт по умолчанию>==========================================================================================
+$fontfamily: "Roboto";
+//</Шрифт по умолчанию>==========================================================================================
+
+//</ШРИФТЫ>=======================================================================================================
+
+//<ПЕРЕМЕННЫЕ>===========================================================================================================
+$minwidth: 320px;
+$mw: 1170;
+$md1: $mw + 12;
+$md2: 991.98;
+$md3: 767.98;
+$md4: 479.98;
+//</ПЕРЕМЕННЫЕ>===========================================================================================================
+
+//<ОБНУЛЕНИЕ, ОБЩИЕ ПАРАМЕТРЫ>===============================================================================================
+@import "null.scss";
+body {
+  color: #333;
+  font-size: 14px;
+  &.lock {
+    overflow: hidden;
+  }
+}
+//</ОБНУЛЕНИЕ, ОБЩИЕ ПАРАМЕТРЫ>===============================================================================================
+
+//<ОБОЛОЧКА>===========================================================================================================
+.wrapper {
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  &.loaded {
+  }
+}
+//</ОБОЛОЧКА>===========================================================================================================
+
+//<ОСНОВНАЯ СЕТКА>===========================================================================================================
+.container {
+  max-width: $mw + px;
+  margin: 0 auto;
+  width: 100%;
+  @media (max-width: $md1+px) {
+    max-width: 970px;
+  }
+  @media (max-width: $md2+px) {
+    max-width: 750px;
+  }
+  @media (max-width: $md3+px) {
+    max-width: none;
+    padding: 0 10px;
+  }
+}
+//</ОСНОВНАЯ СЕТКА>===========================================================================================================
+.logo {
+  display: inline-block;
+  color: #333;
+  font-size: 20px;
+  line-height: 28px;
+  letter-spacing: 0.3px;
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 44px;
+}
+
+h2 {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+  color: #ABABAB;
+}
+
+h3.subtitle {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 44px;
+}
+
+.btn {
+  padding: 10px 40px;
+  background: linear-gradient(92.01deg, #8EA7FF 0%, #7291FF 100%);
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.wrapper {
+  @include flexbox();
+
+}
+
+.main-section {
+  width: 66.67%;
+  padding: 40px 140px;
+
+  .logo {
+    margin-bottom: 78px;
+  }
+
+  .joke-form {
+    margin-bottom: 40px;
+
+    h3 {
+      margin-bottom: 42px;
+    }
+
+    .btn {
+      margin-top: 11px;
+    }
+  }
+}
+
+.radio-group {
+  &__item {
+    margin-bottom: 10px;
+  }
+
+  &__input {
+    display: none;
+
+    + label {
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 26px;
+
+      span {
+        position: relative;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+        margin-right: 15px;
+        cursor:pointer;
+        border-radius: 50%;
+        border: 2px solid #ABABAB;
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 10px;
+          height: 10px;
+          opacity: 0;
+          border-radius: 50%;
+          background-color: #333;
+          transform: translate(-50%, -50%);
+          transition: opacity .2s;
+        }
+      }
+    }
+
+    &:checked + label span {
+      border-color: #333;
+
+      &::before {
+        opacity: 1;
+      }
+    }
+
+    &:checked + label + .categories {
+      display: block;
+
+      &::before {
+        opacity: 1;
+      }
+    }
+
+    &:disabled + label {
+      opacity: .5;
+
+      &, span {
+        cursor: default;
+      }
+    }
+  }
+}
+
+.categories {
+  display: none;
+}
+
+.category-input {
+  display: none;
+
+  + label {
+    display: inline-block;
+    margin: 20px 5px 8px 0;
+    padding: 5px 13px;
+    border: 2px solid #F8F8F8;
+    border-radius: 6px;
+    color: #ABABAB;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    &:hover {
+      color: #333333;
+      background: #F8F8F8;
+    }
+  }
+
+  &:checked  + label {
+    color: #333333;
+    background: #F8F8F8;
+  }
+}
+
+.joke {
+  width: 100%;
+  margin-bottom: 40px;
+  padding: 40px;
+  border-radius: 20px;
+  background: #F8F8F8;
+
+  &-content {
+    @include flexbox();
+
+    &__left {
+      margin-right: 20px;
+    }
+
+    &__right {
+      flex-grow: 1;
+    }
+  }
+
+  &-id {
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 14px;
+    color: #ABABAB;
+
+    &__link {
+      color: #8EA7FF;
+
+      span {
+        background-image: url(images/link-icon.svg);
+      }
+    }
+  }
+
+  &-text {
+    margin-bottom: 17px;
+    font-size: 18px;
+    line-height: 26px;
+    color: #333333;
+  }
+
+  &-info {
+    @include flexbox();
+    justify-content: space-between;
+    align-items: center;
+
+    &__last-update {
+      font-size: 10px;
+      line-height: 14px;
+      color: #ABABAB;
+    }
+
+    &__categories-list {
+      @include flexbox();
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    &__category-name {
+      display: inline-block;
+      margin: 5px 0px 5px 15px;
+      padding: 6px 20px;
+      border-radius: 6px;
+      background: #FFFFFF;
+      font-weight: 500;
+      font-size: 10px;
+      line-height: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #333333;
+      cursor: pointer;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+.favourite-feed {
+  .joke {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    &-info__category-name {
+      display: none;
+    }
+
+    &-text {
+      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 20px;
+    }
+  }
+}
+
+.favourite-btn {
+  display: block;
+  margin-left: auto;
+  width: 20px;
+  height: 17px;
+  margin-bottom: 10px;
+  background-image: url(images/favourite-btn.svg);
+  cursor: pointer;
+
+  &:hover, &.active {
+    background-image: url(images/favourite-btn-active.svg);
+  }
+}
+
+
+.favourite-section {
+  width: 33.33%;
+  padding: 40px;
+  background: #F8F8F8;
+
+  h2 {
+    margin-bottom: 20px;
+  }
+}
+
+
+
