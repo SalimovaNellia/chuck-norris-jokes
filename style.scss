@@ -182,10 +182,10 @@ h3.subtitle {
 
     &:checked + label + .categories {
       display: block;
+    }
 
-      &::before {
-        opacity: 1;
-      }
+    &:checked + label + fieldset {
+      display: block;
     }
 
     &:disabled + label {
@@ -228,6 +228,26 @@ h3.subtitle {
   &:checked  + label {
     color: #333333;
     background: #F8F8F8;
+  }
+}
+
+.search {
+  display: none;
+
+  &__input {
+    width: 100%;
+    margin: 20px 0;
+    padding: 10px 15px;
+    border: 2px solid #333333;
+    border-radius: 10px;
+    font-size: 16px;
+    line-height: 22px;
+    color: #333;
+
+    &::placeholder {
+      color: #ABABAB;
+
+    }
   }
 }
 

@@ -1,3 +1,5 @@
+'use strict';
+
 let categoriesWrap = document.getElementById('categories');
 let form = document.getElementById('jokeForm');
 
@@ -5,52 +7,54 @@ getCategories();
 
 function getCategories() {
     fetch("https://api.chucknorris.io/jokes/categories")
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (categories) {
+        .then(response => response.json())
+        .then(categories => {
             createCategoriesList(categories);
         })
-        .catch(function (error) {
+        .catch(error => {
             console.log("Error: " + error);
         });
 }
-
-
 
 form.addEventListener("submit", event => {
     let data = new FormData(event.target);
     let radioValue = data.get('getBy');
     let categoryValue = data.get('category');
+    let searchInput = data.get('searchInput');
 
     if (radioValue === 'random') {
         fetch("https://api.chucknorris.io/jokes/random")
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (myJson) {
+            .then(response => response.json())
+            .then(myJson => {
                 console.log(myJson);
                 createJokeElem(myJson);
             })
-            .catch(function (error) {
+            .catch(error => {
                 console.log("Error: " + error);
             });
     } else if (radioValue === 'category') {
         fetch(`https://api.chucknorris.io/jokes/random?category=${categoryValue}`)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (categoriesList) {
-                console.log(categoriesList);
+            .then(response => response.json())
+            .then(categoriesList => {
                 createJokeElem(categoriesList);
             })
-            .catch(function (error) {
+            .catch(error => {
+                console.log("Error: " + error);
+            });
+    } else if (radioValue === 'search') {
+        fetch(`https://api.chucknorris.io/jokes/search?query=${searchInput}`)
+            .then(response => response.json())
+            .then(result => {
+                if (result.result.length > 0) {
+                    result.result.forEach(joke => createJokeElem(joke));
+                } else {
+                    noResultsMessage();
+                }
+            })
+            .catch(error => {
                 console.log("Error: " + error);
             });
     }
-
-
-    console.log(data.get('getBy'));
 
     event.preventDefault();
 }, false);
@@ -143,4 +147,17 @@ function createCategoriesList(categories) {
 
         categoriesWrap.append(categoryInput, categoryLabel);
     }
+}
+
+function noResultsMessage() {
+    let jokesFeed = document.getElementById('jokesFeed');
+
+    let newJoke = document.createElement('div');
+    newJoke.classList.add('joke');
+
+    let jokeText = document.createElement('p');
+    jokeText.classList.add('joke-text');
+    jokeText.appendChild(document.createTextNode('The search has not given any results'));
+    newJoke.append(jokeText);
+    jokesFeed.append(newJoke);
 }
