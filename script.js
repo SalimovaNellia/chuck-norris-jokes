@@ -28,8 +28,8 @@ form.addEventListener("submit", event => {
         fetch("https://api.chucknorris.io/jokes/random")
             .then(response => response.json())
             .then(newJoke => {
-                updateJokesFeed(createJokeElem(newJoke));
                 jokesMap.set(newJoke.id, newJoke);
+                updateJokesFeed();
             })
             .catch(error => {
                 console.log("Error: " + error);
@@ -38,8 +38,8 @@ form.addEventListener("submit", event => {
         fetch(`https://api.chucknorris.io/jokes/random?category=${categoryValue}`)
             .then(response => response.json())
             .then(newJoke => {
-                updateJokesFeed(createJokeElem(newJoke));
                 jokesMap.set(newJoke.id, newJoke);
+                updateJokesFeed();
             })
             .catch(error => {
                 console.log("Error: " + error);
@@ -50,8 +50,8 @@ form.addEventListener("submit", event => {
             .then(result => {
                 if (result.result.length > 0) {
                     result.result.forEach(joke => {
-                            updateJokesFeed(createJokeElem(joke));
                             jokesMap.set(joke.id, joke);
+                            updateJokesFeed();
                         }
                     );
                 } else {
@@ -78,6 +78,7 @@ function favouriteToggle(event) {
     }
 
     updateFavouriteList();
+    updateJokesFeed();
 
     console.log('favouriteJokesMap', favouriteJokesMap);
 }
@@ -85,25 +86,27 @@ function favouriteToggle(event) {
 function updateFavouriteList(){
     let jokesFeed = document.getElementById('favouriteFeed');
     jokesFeed.innerHTML = '';
- favouriteJokesMap.forEach((newJoke, b) => {
-     jokesFeed.append(createJokeElem(newJoke));
- })
+    favouriteJokesMap.forEach((joke, b) => {
+        jokesFeed.append(createJokeElem(joke));
+     })
 }
 
-function updateJokesFeed(newJoke) {
+function updateJokesFeed() {
     let jokesFeed = document.getElementById('jokesFeed');
-    jokesFeed.append(newJoke);
+    jokesFeed.innerHTML = '';
+    jokesMap.forEach((joke, b) => {
+        jokesFeed.append(createJokeElem(joke));
+    });
 }
 
-
-
-function createJokeElem(joke, isFavourite) {
+function createJokeElem(joke) {
     let newJoke = document.createElement('div');
     newJoke.classList.add('joke');
 
     let favouriteBtn = document.createElement('span');
     favouriteBtn.classList.add('favourite-btn');
-    if (isFavourite) {
+    console.log(favouriteJokesMap.get(joke.id));
+    if (favouriteJokesMap.get(joke.id)) {
         favouriteBtn.classList.add('active');
     }
     favouriteBtn.addEventListener("click", favouriteToggle);
