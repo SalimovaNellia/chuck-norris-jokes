@@ -3,7 +3,16 @@
 let categoriesWrap = document.getElementById('categories');
 let form = document.getElementById('jokeForm');
 let jokesMap = new Map();
-let favouriteJokesMap = new Map();
+let favouriteJokesMap;
+
+if (localStorage.getItem('favouriteJokesMap')) {
+    favouriteJokesMap = new Map(JSON.parse(localStorage.getItem('favouriteJokesMap')));
+    console.log(favouriteJokesMap);
+} else {
+    favouriteJokesMap = new Map();
+}
+updateFavouriteList();
+
 
 getCategories();
 
@@ -79,8 +88,7 @@ function favouriteToggle(event) {
 
     updateFavouriteList();
     updateJokesFeed();
-
-    console.log('favouriteJokesMap', favouriteJokesMap);
+    localStorage.setItem('favouriteJokesMap', JSON.stringify(Array.from(favouriteJokesMap.entries())));
 }
 
 function updateFavouriteList(){
