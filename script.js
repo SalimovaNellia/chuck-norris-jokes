@@ -2,6 +2,8 @@
 
 let categoriesWrap = document.getElementById('categories');
 let form = document.getElementById('jokeForm');
+let jokesMap = new Map();
+let favouriteJokesMap = new Map();
 
 getCategories();
 
@@ -25,9 +27,9 @@ form.addEventListener("submit", event => {
     if (radioValue === 'random') {
         fetch("https://api.chucknorris.io/jokes/random")
             .then(response => response.json())
-            .then(myJson => {
-                console.log(myJson);
-                createJokeElem(myJson);
+            .then(newJoke => {
+                updateJokesFeed(createJokeElem(newJoke));
+                jokesMap.set(newJoke.id, newJoke);
             })
             .catch(error => {
                 console.log("Error: " + error);
@@ -35,8 +37,9 @@ form.addEventListener("submit", event => {
     } else if (radioValue === 'category') {
         fetch(`https://api.chucknorris.io/jokes/random?category=${categoryValue}`)
             .then(response => response.json())
-            .then(categoriesList => {
-                createJokeElem(categoriesList);
+            .then(newJoke => {
+                updateJokesFeed(createJokeElem(newJoke));
+                jokesMap.set(newJoke.id, newJoke);
             })
             .catch(error => {
                 console.log("Error: " + error);
@@ -46,7 +49,11 @@ form.addEventListener("submit", event => {
             .then(response => response.json())
             .then(result => {
                 if (result.result.length > 0) {
-                    result.result.forEach(joke => createJokeElem(joke));
+                    result.result.forEach(joke => {
+                            updateJokesFeed(createJokeElem(joke));
+                            jokesMap.set(joke.id, joke);
+                        }
+                    );
                 } else {
                     noResultsMessage();
                 }
@@ -59,10 +66,48 @@ form.addEventListener("submit", event => {
     event.preventDefault();
 }, false);
 
-function createJokeElem(joke) {
+function favouriteToggle(event) {
+    event.target.classList.toggle('active');
+    let targetJoke = event.target.parentElement;
+    let targetJokeId = targetJoke.querySelector('.joke-id__link').getAttribute('href');
+
+    if(!favouriteJokesMap.has(targetJokeId)) {
+        favouriteJokesMap.set(targetJokeId, jokesMap.get(targetJokeId));
+    } else {
+        favouriteJokesMap.delete(targetJokeId);
+    }
+
+    updateFavouriteList();
+
+    console.log('favouriteJokesMap', favouriteJokesMap);
+}
+
+function updateFavouriteList(){
+    let jokesFeed = document.getElementById('favouriteFeed');
+    jokesFeed.innerHTML = '';
+ favouriteJokesMap.forEach((newJoke, b) => {
+     jokesFeed.append(createJokeElem(newJoke));
+ })
+}
+
+function updateJokesFeed(newJoke) {
+    let jokesFeed = document.getElementById('jokesFeed');
+    jokesFeed.append(newJoke);
+}
+
+
+
+function createJokeElem(joke, isFavourite) {
     let newJoke = document.createElement('div');
     newJoke.classList.add('joke');
-    newJoke.innerHTML  = '<span class="favourite-btn"></span>';
+
+    let favouriteBtn = document.createElement('span');
+    favouriteBtn.classList.add('favourite-btn');
+    if (isFavourite) {
+        favouriteBtn.classList.add('active');
+    }
+    favouriteBtn.addEventListener("click", favouriteToggle);
+    newJoke.append(favouriteBtn);
 
     let jokeContent = document.createElement('div');
     jokeContent.classList.add('joke-content');
@@ -123,12 +168,11 @@ function createJokeElem(joke) {
     newJoke.append(jokeContent);
 
     jokeContent.append(jokeContentRight);
-    let jokesFeed = document.getElementById('jokesFeed');
-    jokesFeed.append(newJoke);
+
+    return newJoke;
 }
 
 function createCategoriesList(categories) {
-    console.log(categories.length);
     for (let i = 0; i < categories.length; i++) {
         let categoryInput = document.createElement("input");
         categoryInput.classList.add('category-input');
@@ -161,3 +205,5 @@ function noResultsMessage() {
     newJoke.append(jokeText);
     jokesFeed.append(newJoke);
 }
+
+
