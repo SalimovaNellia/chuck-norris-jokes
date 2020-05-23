@@ -1,6 +1,6 @@
 'use strict';
 
-let categoriesWrap = document.getElementById('categories');
+let categoriesWrapper = document.getElementById('categories'); // не нравится имя
 let form = document.getElementById('jokeForm');
 let jokesMap = new Map();
 let favouriteJokesMap;
@@ -94,9 +94,7 @@ function favouriteToggle(event) {
 function updateFavouriteList(){
     let jokesFeed = document.getElementById('favouriteFeed');
     jokesFeed.innerHTML = '';
-    favouriteJokesMap.forEach((joke, b) => {
-        jokesFeed.append(createJokeElem(joke));
-     })
+    favouriteJokesMap.forEach((joke, b) => jokesFeed.append(createJokeElem(joke)));
 }
 
 function updateJokesFeed() {
@@ -200,7 +198,7 @@ function createCategoriesList(categories) {
         categoryLabel.innerHTML = `${categories[i]}`;
         categoryLabel.setAttribute('for', `${categories[i]}Category`);
 
-        categoriesWrap.append(categoryInput, categoryLabel);
+        categoriesWrapper.append(categoryInput, categoryLabel);
     }
 }
 
