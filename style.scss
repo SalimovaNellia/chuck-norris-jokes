@@ -108,6 +108,7 @@ h3.subtitle {
 
 .wrapper {
   @include flexbox();
+  position: relative;
 
 }
 
@@ -131,6 +132,70 @@ h3.subtitle {
     }
   }
 }
+
+.header {
+  @include flexbox();
+  justify-content: space-between;
+  margin-bottom: 78px;
+}
+
+.sidebar-toggle {
+  display: none;
+  cursor: pointer;
+  z-index: 3;
+
+  @media (max-width: 992px) {
+    display: flex;
+  }
+
+  &__btn {
+    position: relative;
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    margin-right: 11px;
+    background: #333333;
+    border-radius: 50%;
+
+    &:after, &:before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: calc(50% - 7px);
+      width: 14px;
+      height: 2px;
+      background: #FFFFFF;
+      border-radius: 2px;
+      transition: all 0.5s;
+    }
+
+    &:before {
+      top: 16px;
+    }
+
+    &.open {
+      &:after {
+        width: 14px;
+        top: 13px;
+        transform: rotate(-45deg);
+      }
+      &:before {
+        top: 13px;
+        width: 14px;
+        transform: rotate(45deg);
+      }
+    }
+  }
+
+  &__text {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 28px;
+    color: #ABABAB;
+  }
+}
+
+
 
 .radio-group {
   &__item {
@@ -362,6 +427,21 @@ h3.subtitle {
 
   &:hover, &.active {
     background-image: url(images/favourite-btn-active.svg);
+  }
+}
+
+#shadow {
+  display: none;
+
+  &.open  {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0 , 0, 0.8);
+    z-index: 1;
   }
 }
 
